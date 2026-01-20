@@ -3,510 +3,922 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BioGenerator | iOS Style</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <title>Ez-bio.pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #f5f5f7;
-            color: #1c1c1e;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Unbounded', sans-serif;
+            background: #0a0a0f;
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
         }
-        
-        .ios-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-        
-        .ios-input {
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 12px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            transition: all 0.2s ease;
-        }
-        
-        .ios-input:focus {
-            background: rgba(255, 255, 255, 0.9);
-            border-color: rgba(0, 122, 255, 0.3);
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
-        }
-        
-        .ios-button {
-            background: #007aff;
-            color: white;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-        
-        .ios-button:hover {
-            background: #0062cc;
-        }
-        
-        .ios-button-secondary {
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 12px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            transition: all 0.2s ease;
-        }
-        
-        .ios-button-secondary:hover {
-            background: rgba(255, 255, 255, 0.9);
-        }
-        
-        #particles-js {
+        .blur-orb {
             position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .blur-orb-1 { width:500px; height:500px; background:rgba(99,102,241,0.3); top:-150px; left:-150px; animation:float1 15s ease-in-out infinite; }
+        .blur-orb-2 { width:400px; height:400px; background:rgba(139,92,246,0.25); top:50%; right:-100px; animation:float2 20s ease-in-out infinite; }
+        .blur-orb-3 { width:350px; height:350px; background:rgba(59,130,246,0.2); bottom:-100px; left:30%; animation:float3 18s ease-in-out infinite; }
+        .blur-orb-4 { width:300px; height:300px; background:rgba(168,85,247,0.15); top:40%; left:10%; animation:float4 22s ease-in-out infinite; }
+        @keyframes float1 { 0%,100% {transform:translate(0,0) scale(1);} 50% {transform:translate(50px,50px) scale(1.1);} }
+        @keyframes float2 { 0%,100% {transform:translate(0,0) scale(1);} 50% {transform:translate(-30px,-40px) scale(0.9);} }
+        @keyframes float3 { 0%,100% {transform:translate(0,0) scale(1);} 50% {transform:translate(40px,-30px) scale(1.05);} }
+        @keyframes float4 { 0%,100% {transform:translate(0,0) scale(1);} 50% {transform:translate(-20px,60px) scale(0.95);} }
+        .site-header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 20px 40px;
+            background: rgba(10,10,15,0.6);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .site-header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #a78bfa 0%, #6366f1 50%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .video-background {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            object-fit: cover;
+            display: none;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 100px 20px 40px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+        .bio-editor {
+            background: rgba(15,15,25,0.7);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 100px rgba(99,102,241,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .bio-editor h2 {
+            text-align: center;
+            margin-bottom: 35px;
+            font-size: 28px;
+            background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 50%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+        .form-group { margin-bottom: 24px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: rgba(167,139,250,0.9);
+            font-weight: 500;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-group input,
+        .form-group textarea {
             width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
+            padding: 14px 18px;
+            background: rgba(20,20,35,0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            color: #ffffff;
+            font-size: 14px;
+            font-family: 'Unbounded', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder { color: rgba(255,255,255,0.3); }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: rgba(139,92,246,0.6);
+            box-shadow: 0 0 0 4px rgba(139,92,246,0.15), 0 0 30px rgba(139,92,246,0.2);
+            background: rgba(25,25,45,0.9);
+        }
+        .btn {
+            padding: 14px 28px;
+            background: rgba(99,102,241,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139,92,246,0.4);
+            border-radius: 14px;
+            color: white;
+            font-weight: 500;
+            font-family: 'Unbounded', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+            font-size: 14px;
+            box-shadow: 0 4px 20px rgba(99,102,241,0.2);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            background: rgba(139,92,246,0.3);
+            border-color: rgba(167,139,250,0.6);
+            box-shadow: 0 8px 30px rgba(139,92,246,0.3);
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 56px;
+            height: 30px;
+        }
+        .toggle-switch input { opacity:0; width:0; height:0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top:0; left:0; right:0; bottom:0;
+            background: rgba(30,30,50,0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: .4s;
+            border-radius: 30px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background: rgba(255,255,255,0.9);
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background: rgba(139,92,246,0.5); border-color: rgba(167,139,250,0.5); }
+        input:checked + .slider:before { transform: translateX(26px); background: #a78bfa; }
+        .profile-card {
+            background: rgba(15,15,25,0.75);
+            backdrop-filter: blur(50px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 28px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 120px rgba(99,102,241,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 24px;
+            margin: 0 auto 24px;
+            background-color: rgba(139,92,246,0.4);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 52px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4), 0 0 60px rgba(139,92,246,0.2), inset 0 1px 0 rgba(3,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .avatar.has-image { background-color: transparent; }
+        .username { color:#ffffff; font-size:26px; font-weight:600; margin-bottom:16px; letter-spacing:-0.5px; }
+        .bio-text { color:rgba(255,255,255,0.6); font-size:14px; line-height:1.7; margin-bottom:28px; }
+        .social-icons { display:flex; justify-content:center; gap:14px; margin-bottom:28px; }
+        .social-icon {
+            width:44px; height:44px;
+            background: rgba(30,30,50,0.6);
+            backdrop-filter: blur(10px);
+            border-radius:12px;
+            display:flex; align-items:center; justify-content:center;
+            color:rgba(255,255,255,0.8);
+            text-decoration:none;
+            transition:all 0.3s ease;
+            border:1px solid rgba(255,255,255,0.08);
+        }
+        .social-icon:hover {
+            background: rgba(139,92,246,0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139,92,246,0.3);
+            border-color: rgba(167,139,250,0.4);
+        }
+        .social-buttons { display:flex; flex-direction:column; gap:14px; }
+        .social-btn {
+            background: rgba(30,30,50,0.6);
+            backdrop-filter: blur(10px);
+            color:white;
+            border:1px solid rgba(255,255,255,0.1);
+            padding:14px 22px;
+            border-radius:14px;
+            font-family:'Unbounded',sans-serif;
+            font-weight:500;
+            font-size:14px;
+            cursor:pointer;
+            transition:all 0.3s ease;
+            text-decoration:none;
+            display:flex; align-items:center; justify-content:center;
+            gap:10px;
+            box-shadow:0 4px 20px rgba(0,0,0,0.3);
+        }
+        .social-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(0,0,0,0.4); }
+        .social-btn.soundcloud { background:rgba(255,133,0,0.2); border-color:rgba(255,133,0,0.3); }
+        .social-btn.soundcloud:hover { background:rgba(255,133,0,0.35); }
+        .social-btn.telegram { background:rgba(0,136,204,0.2); border-color:rgba(0,136,204,0.3); }
+        .social-btn.telegram:hover { background:rgba(0,136,204,0.35); }
+        .social-btn.instagram { background:rgba(225,48,108,0.2); border-color:rgba(225,48,108,0.3); }
+        .social-btn.instagram:hover { background:rgba(225,48,108,0.35); }
+        .social-btn.youtube { background:rgba(255,0,0,0.2); border-color:rgba(255,0,0,0.3); }
+        .social-btn.youtube:hover { background:rgba(255,0,0,0.35); }
+        .icon { width:18px; height:18px; fill:currentColor; }
+        .hidden { display:none; }
+        .form-row { display:flex; gap:20px; }
+        .form-row .form-group { flex:1; }
+        @media (max-width:600px) { .form-row { flex-direction:column; gap:0; } }
+        .toggle-container { display:flex; align-items:center; gap:15px; margin-top:12px; }
+        .toggle-container label:first-child { margin-bottom:0; text-transform:none; font-size:14px; color:rgba(255,255,255,0.6); }
+        .button-group { text-align:center; margin-top:35px; }
+        .notification {
+            position:fixed;
+            top:90px; right:24px;
+            background:rgba(15,15,25,0.95);
+            backdrop-filter:blur(30px);
+            border:1px solid rgba(34,197,94,0.3);
+            border-radius:16px;
+            padding:18px 24px;
+            display:flex; align-items:center; gap:14px;
+            z-index:2000;
+            box-shadow:0 15px 50px rgba(0,0,0,0.5), 0 0 40px rgba(34,197,94,0.15);
+            transform:translateX(120%);
+            transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+        }
+        .notification.show { transform:translateX(0); }
+        .notification-icon {
+            width:42px; height:42px;
+            background:rgba(34,197,94,0.2);
+            border-radius:12px;
+            display:flex; align-items:center; justify-content:center;
+            color:#22c55e; font-size:20px;
+        }
+        .notification-content h4 { color:#ffffff; font-size:14px; font-weight:600; margin-bottom:4px; }
+        .notification-content p { color:rgba(255,255,255,0.6); font-size:12px; }
+        .theme-section {
+            background:rgba(20,20,35,0.5);
+            backdrop-filter:blur(15px);
+            border-radius:18px;
+            padding:24px;
+            margin:28px 0;
+            border:1px solid rgba(255,255,255,0.06);
+        }
+        .theme-section h3 {
+            color:rgba(167,139,250,0.9);
+            margin-bottom:20px;
+            font-size:15px;
+            font-weight:500;
+        }
+        .theme-grid {
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:14px;
+        }
+        @media (max-width:600px) { .theme-grid { grid-template-columns:repeat(2,1fr); } }
+        .theme-option {
+            position:relative;
+            padding:18px 14px;
+            border-radius:14px;
+            cursor:pointer;
+            transition:all 0.3s ease;
+            border:2px solid transparent;
+            text-align:center;
+        }
+        .theme-option:hover { transform:translateY(-2px); }
+        .theme-option.selected { border-color:rgba(255,255,255,0.4); }
+        .theme-option .theme-name {
+            color:white;
+            font-size:12px;
+            font-weight:500;
+            margin-top:8px;
+        }
+        .theme-preview {
+            display:flex;
+            gap:6px;
+            justify-content:center;
+            margin-bottom:6px;
+        }
+        .theme-dot {
+            width:18px; height:18px;
+            border-radius:50%;
+            border:1px solid rgba(255,255,255,0.2);
+        }
+        .theme-purple { background:linear-gradient(135deg,rgba(139,92,246,0.3),rgba(99,102,241,0.2)); }
+        .theme-cyan   { background:linear-gradient(135deg,rgba(6,182,212,0.3),rgba(34,211,238,0.2)); }
+        .theme-rose   { background:linear-gradient(135deg,rgba(244,63,94,0.3),rgba(251,113,133,0.2)); }
+        .theme-emerald{ background:linear-gradient(135deg,rgba(16,185,129,0.3),rgba(52,211,153,0.2)); }
+        .theme-amber  { background:linear-gradient(135deg,rgba(245,158,11,0.3),rgba(251,191,36,0.2)); }
+        .theme-slate  { background:linear-gradient(135deg,rgba(100,116,139,0.3),rgba(148,163,184,0.2)); }
+        @media (max-width:768px) {
+            .container { padding:90px 15px 30px; }
+            .site-header { padding:16px 20px; }
+            .site-header h1 { font-size:16px; }
+            .bio-editor, .profile-card { padding:28px; margin:10px; border-radius:20px; }
+            .username { font-size:22px; }
+            .blur-orb { opacity:0.25; }
         }
     </style>
 </head>
 <body>
-    <!-- Particles.js Background -->
-    <div id="particles-js"></div>
-    
-    <div class="min-h-screen flex items-center justify-center p-4">
-        <div class="w-full max-w-4xl">
-            <!-- Header -->
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold mb-2">BioGenerator</h1>
-                <p class="text-gray-600">Создайте свою уникальную био-страницу</p>
+
+<div class="blur-orb blur-orb-1"></div>
+<div class="blur-orb blur-orb-2"></div>
+<div class="blur-orb blur-orb-3"></div>
+<div class="blur-orb blur-orb-4"></div>
+
+<header class="site-header">
+    <h1>Ez-bio.pro</h1>
+</header>
+
+<div class="notification" id="notification">
+    <div class="notification-icon">✔</div>
+    <div class="notification-content">
+        <h4>Визитка успешно создана!</h4>
+        <p>Чтобы сохранить нажми Ctrl+Shift+S</p>
+    </div>
+</div>
+
+<video class="video-background" id="videoBackground" autoplay muted loop></video>
+<audio id="backgroundAudio" loop></audio>
+
+<div class="container">
+
+    <div class="bio-editor" id="bioEditor">
+        <h2>Создай свою визитку</h2>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Пользователь</label>
+                <input type="text" id="profileName" placeholder="@username">
             </div>
-            
-            <div class="flex flex-col lg:flex-row gap-6">
-                <!-- Editor Panel -->
-                <div class="lg:w-1/2">
-                    <div class="ios-card p-6">
-                        <h2 class="text-xl font-semibold mb-6 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            Основная информация
-                        </h2>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-2">Ваше имя</label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    class="w-full px-4 py-3 ios-input focus:outline-none"
-                                    placeholder="Иван Иванов"
-                                />
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium mb-2">Описание</label>
-                                <textarea
-                                    id="description"
-                                    rows="3"
-                                    class="w-full px-4 py-3 ios-input focus:outline-none"
-                                    placeholder="Расскажите о себе..."
-                                ></textarea>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium mb-2">Аватар (URL)</label>
-                                <div class="flex gap-2">
-                                    <input
-                                        type="text"
-                                        id="avatar"
-                                        class="flex-1 px-4 py-3 ios-input focus:outline-none"
-                                        placeholder="https://example.com/avatar.jpg"
-                                        value="https://picsum.photos/150?random=1"
-                                    />
-                                    <button 
-                                        id="random-avatar"
-                                        class="px-4 ios-button-secondary focus:outline-none"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h2 class="text-xl font-semibold mt-8 mb-6 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
-                            Ссылки
-                        </h2>
-                        
-                        <div class="space-y-4" id="links-container">
-                            <div class="link-item flex gap-2">
-                                <div class="flex-1 space-y-2">
-                                    <input
-                                        type="text"
-                                        class="w-full px-4 py-3 ios-input focus:outline-none link-title"
-                                        placeholder="Название ссылки"
-                                    />
-                                    <input
-                                        type="url"
-                                        class="w-full px-4 py-3 ios-input focus:outline-none link-url"
-                                        placeholder="https://example.com"
-                                    />
-                                </div>
-                                <button 
-                                    class="px-4 h-[58px] self-end ios-button-secondary focus:outline-none remove-link"
-                                >
-                                    ×
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <button
-                            id="add-link"
-                            class="w-full py-3 mt-4 ios-button-secondary focus:outline-none flex items-center justify-center gap-2"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
-                            <span>Добавить ссылку</span>
-                        </button>
-                        
-                        <h2 class="text-xl font-semibold mt-8 mb-6 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-palette"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
-                            Дизайн
-                        </h2>
-                        
-                        <div class="grid grid-cols-3 gap-3" id="theme-selector">
-                            <button
-                                data-theme="blue"
-                                class="p-3 rounded-xl border-2 border-blue-500/30 theme-option"
-                            >
-                                <div class="h-12 rounded-lg bg-blue-500 mb-2"></div>
-                                <div class="text-sm text-center">Синяя</div>
-                            </button>
-                            <button
-                                data-theme="purple"
-                                class="p-3 rounded-xl border-2 border-transparent theme-option"
-                            >
-                                <div class="h-12 rounded-lg bg-purple-500 mb-2"></div>
-                                <div class="text-sm text-center">Фиолетовая</div>
-                            </button>
-                            <button
-                                data-theme="dark"
-                                class="p-3 rounded-xl border-2 border-transparent theme-option"
-                            >
-                                <div class="h-12 rounded-lg bg-gray-900 mb-2"></div>
-                                <div class="text-sm text-center">Тёмная</div>
-                            </button>
-                        </div>
-                        
-                        <button
-                            id="save-button"
-                            class="w-full py-4 mt-8 ios-button focus:outline-none flex items-center justify-center gap-2"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                            <span>Сохранить страницу</span>
-                        </button>
-                    </div>
+            <div class="form-group">
+                <label>Имя</label>
+                <input type="text" id="displayName" placeholder="Твоё имя">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Описание</label>
+            <textarea id="profileBio" rows="3" placeholder="Напиши о себе..."></textarea>
+        </div>
+
+        <div class="media-section">
+            <h3>Доп. опции</h3>
+            <div class="form-group">
+                <label>Ссылка на аватар</label>
+                <div style="display:flex; align-items:center;">
+                    <input type="url" id="avatarUrl" placeholder="https://example.com/avatar.jpg" style="flex:1;">
+                    <div class="avatar-preview" id="avatarPreview"></div>
                 </div>
-                
-                <!-- Preview Panel -->
-                <div class="lg:w-1/2">
-                    <div class="ios-card p-1 overflow-hidden">
-                        <div class="p-1 bg-gray-100 rounded-t-xl flex justify-center">
-                            <div class="w-24 h-1 bg-gray-300 rounded-full"></div>
-                        </div>
-                        <div id="preview" class="p-8 min-h-[600px] bg-blue-50 text-blue-900">
-                            <div class="flex flex-col items-center text-center">
-                                <img 
-                                    src="https://picsum.photos/150?random=1"
-                                    alt="Аватар пользователя"
-                                    class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mb-4"
-                                    id="preview-avatar"
-                                />
-                                
-                                <h2 class="text-2xl font-bold mb-2" id="preview-name">Ваше имя</h2>
-                                <p class="text-lg opacity-80 mb-6" id="preview-description">
-                                    Краткое описание о себе
-                                </p>
-                                
-                                <div class="w-full max-w-md space-y-3" id="preview-links">
-                                    <a
-                                        href="#"
-                                        target="_blank"
-                                        class="block bg-blue-500 hover:opacity-90 text-white py-3 px-6 rounded-full text-center font-medium transition"
-                                    >
-                                        Пример ссылки
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+            <div class="form-group">
+                <label>Ссылка на фоновое видео</label>
+                <input type="url" id="videoUrl" placeholder="https://example.com/video.mp4">
+                <div class="toggle-container">
+                    <label>Использовать фоновое видео</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="videoToggle">
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
         </div>
+
+        <div class="form-group">
+            <label>Соцсети (по одной на строку)</label>
+            <textarea id="socialLinks" rows="6" placeholder="Instagram: https://instagram.com/username&#10;Telegram: https://t.me/username&#10;YouTube: https://youtube.com/channel&#10;SoundCloud: https://soundcloud.com/username"></textarea>
+        </div>
+
+        <div class="theme-section">
+            <h3>Темы</h3>
+            <div class="theme-grid">
+                <div class="theme-option theme-purple selected" data-theme="purple">
+                    <div class="theme-preview">
+                        <div class="theme-dot" style="background:#8b5cf6;"></div>
+                        <div class="theme-dot" style="background:#6366f1;"></div>
+                    </div>
+                    <div class="theme-name">Purple</div>
+                </div>
+                <div class="theme-option theme-cyan" data-theme="cyan">
+                    <div class="theme-preview">
+                        <div class="theme-dot" style="background:#06b6d4;"></div>
+                        <div class="theme-dot" style="background:#22d3ee;"></div>
+                    </div>
+                    <div class="theme-name">Cyan</div>
+                </div>
+                <div class="theme-option theme-rose" data-theme="rose">
+                    <div class="theme-preview">
+                        <div class="theme-dot" style="background:#f43f5e;"></div>
+                        <div class="theme-dot" style="background:#fb7185;"></div>
+                    </div>
+                    <div class="theme-name">Rose</div>
+                </div>
+                <div class="theme-option theme-emerald" data-theme="emerald">
+                    <div class="theme-preview">
+                        <div class="theme-dot" style="background:#10b981;"></div>
+                        <div class="theme-dot" style="background:#34d399;"></div>
+                    </div>
+                    <div class="theme-name">Emerald</div>
+                </div>
+                <div class="theme-option theme-amber" data-theme="amber">
+                    <div class="theme-preview">
+                        <div class="theme-dot" style="background:#f59e0b;"></div>
+                        <div class="theme-dot" style="background:#fbbf24;"></div>
+                    </div>
+                    <div class="theme-name">Amber</div>
+                </div>
+                <div class="theme-option theme-slate" data-theme="slate">
+                    <div class="theme-preview">
+                        <div class="theme-dot" style="background:#64748b;"></div>
+                        <div class="theme-dot" style="background:#94a3b8;"></div>
+                    </div>
+                    <div class="theme-name">Slate</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn" id="previewBtn">Предпросмотр</button>
+            <button class="btn" id="saveBtn">Создать</button>
+        </div>
     </div>
 
-    <script>
-        // Инициализация particles.js
-        particlesJS("particles-js", {
-            "particles": {
-                "number": {
-                    "value": 80,
-                    "density": {
-                        "enable": true,
-                        "value_area": 800
-                    }
-                },
-                "color": {
-                    "value": "#007aff"
-                },
-                "shape": {
-                    "type": "circle",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    },
-                    "polygon": {
-                        "nb_sides": 5
-                    }
-                },
-                "opacity": {
-                    "value": 0.3,
-                    "random": true,
-                    "anim": {
-                        "enable": true,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": 3,
-                    "random": true,
-                    "anim": {
-                        "enable": true,
-                        "speed": 2,
-                        "size_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#007aff",
-                    "opacity": 0.2,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 1,
-                    "direction": "none",
-                    "random": true,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": false,
-                        "rotateX": 600,
-                        "rotateY": 1200
-                    }
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": true,
-                        "mode": "grab"
-                    },
-                    "onclick": {
-                        "enable": true,
-                        "mode": "push"
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 140,
-                        "line_linked": {
-                            "opacity": 1
-                        }
-                    },
-                    "push": {
-                        "particles_nb": 4
-                    }
-                }
-            },
-            "retina_detect": true
-        });
+    <div class="profile-card hidden" id="bioPreview">
+        <div class="avatar" id="previewAvatar"></div>
+        <h1 class="username" id="previewName">@username</h1>
+        <p class="bio-text" id="previewBio">Bio description</p>
+        <div class="social-icons" id="previewIcons"></div>
+        <div class="social-buttons" id="previewButtons"></div>
+        <div class="button-group" style="margin-top:24px;">
+            <button class="btn" id="editFromPreview">Редактировать</button>
+        </div>
+    </div>
 
-        // Обработчики событий для конструктора
-        document.addEventListener('DOMContentLoaded', function() {
-            // Элементы DOM
-            const nameInput = document.getElementById('name');
-            const descriptionInput = document.getElementById('description');
-            const avatarInput = document.getElementById('avatar');
-            const randomAvatarBtn = document.getElementById('random-avatar');
-            const linksContainer = document.getElementById('links-container');
-            const addLinkBtn = document.getElementById('add-link');
-            const themeOptions = document.querySelectorAll('.theme-option');
-            const saveButton = document.getElementById('save-button');
-            
-            // Элементы превью
-            const previewName = document.getElementById('preview-name');
-            const previewDescription = document.getElementById('preview-description');
-            const previewAvatar = document.getElementById('preview-avatar');
-            const previewLinks = document.getElementById('preview-links');
-            const preview = document.getElementById('preview');
-            
-            // Текущая тема
-            let currentTheme = 'blue';
-            const themes = {
-                blue: {
-                    bg: 'bg-blue-50',
-                    text: 'text-blue-900',
-                    button: 'bg-blue-500'
-                },
-                purple: {
-                    bg: 'bg-purple-50',
-                    text: 'text-purple-900',
-                    button: 'bg-purple-500'
-                },
-                dark: {
-                    bg: 'bg-gray-900',
-                    text: 'text-gray-100',
-                    button: 'bg-gray-700'
-                }
-            };
-            
-            // Обновление превью
-            function updatePreview() {
-                previewName.textContent = nameInput.value || 'Ваше имя';
-                previewDescription.textContent = descriptionInput.value || 'Краткое описание о себе';
-                previewAvatar.src = avatarInput.value || 'https://picsum.photos/150?random=1';
-                
-                // Обновляем ссылки
-                previewLinks.innerHTML = '';
-                const linkItems = document.querySelectorAll('.link-item');
-                
-                linkItems.forEach(item => {
-                    const title = item.querySelector('.link-title').value || 'Название ссылки';
-                    const url = item.querySelector('.link-url').value || '#';
-                    
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.target = '_blank';
-                    link.className = `block ${themes[currentTheme].button} hover:opacity-90 text-white py-3 px-6 rounded-full text-center font-medium transition`;
-                    link.textContent = title;
-                    
-                    previewLinks.appendChild(link);
-                });
-                
-                // Обновляем тему
-                preview.className = `p-8 min-h-[600px] ${themes[currentTheme].bg} ${themes[currentTheme].text}`;
-            }
-            
-            // Слушатели событий
-            nameInput.addEventListener('input', updatePreview);
-            descriptionInput.addEventListener('input', updatePreview);
-            avatarInput.addEventListener('input', updatePreview);
-            
-            // Случайный аватар
-            randomAvatarBtn.addEventListener('click', function() {
-                avatarInput.value = `https://picsum.photos/150?random=${Math.floor(Math.random() * 1000)}`;
-                updatePreview();
-            });
-            
-            // Добавление новой ссылки
-            addLinkBtn.addEventListener('click', function() {
-                const linkItem = document.createElement('div');
-                linkItem.className = 'link-item flex gap-2';
-                linkItem.innerHTML = `
-                    <div class="flex-1 space-y-2">
-                        <input
-                            type="text"
-                            class="w-full px-4 py-3 ios-input focus:outline-none link-title"
-                            placeholder="Название ссылки"
-                        />
-                        <input
-                            type="url"
-                            class="w-full px-4 py-3 ios-input focus:outline-none link-url"
-                            placeholder="https://example.com"
-                        />
-                    </div>
-                    <button 
-                        class="px-4 h-[58px] self-end ios-button-secondary focus:outline-none remove-link"
-                    >
-                        ×
-                    </button>
-                `;
-                
-                linksContainer.appendChild(linkItem);
-                
-                // Добавляем обработчики для новой ссылки
-                const titleInput = linkItem.querySelector('.link-title');
-                const urlInput = linkItem.querySelector('.link-url');
-                const removeBtn = linkItem.querySelector('.remove-link');
-                
-                titleInput.addEventListener('input', updatePreview);
-                urlInput.addEventListener('input', updatePreview);
-                
-                removeBtn.addEventListener('click', function() {
-                    if (document.querySelectorAll('.link-item').length > 1) {
-                        linkItem.remove();
-                        updatePreview();
-                    }
-                });
-            });
-            
-            // Выбор темы
-            themeOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    currentTheme = this.dataset.theme;
-                    
-                    // Обновляем стили кнопок выбора темы
-                    themeOptions.forEach(opt => {
-                        opt.classList.remove('border-blue-500/30');
-                        opt.classList.add('border-transparent');
-                    });
-                    
-                    this.classList.add('border-blue-500/30');
-                    this.classList.remove('border-transparent');
-                    
-                    updatePreview();
-                });
-            });
-            
-            // Сохранение (имитация)
-            saveButton.addEventListener('click', function() {
-                this.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg><span>Ссылка скопирована!</span>';
-                
-                // Копируем ссылку в буфер обмена
-                const url = `https://mybio.example.com/${encodeURIComponent(nameInput.value || 'user')}`;
-                navigator.clipboard.writeText(url);
-                
-                // Возвращаем исходный текст через 2 секунды
-                setTimeout(() => {
-                    this.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span>Сохранить страницу</span>';
-                }, 2000);
-            });
-            
-            // Инициализация первой ссылки
-            const firstTitle = document.querySelector('.link-title');
-            const firstUrl = document.querySelector('.link-url');
-            const firstRemove = document.querySelector('.remove-link');
-            
-            firstTitle.addEventListener('input', updatePreview);
-            firstUrl.addEventListener('input', updatePreview);
-            
-            firstRemove.addEventListener('click', function() {
-                // Не позволяем удалить последнюю ссылку
-                if (document.querySelectorAll('.link-item').length > 1) {
-                    this.closest('.link-item').remove();
-                    updatePreview();
-                }
-            });
-            
-            // Первоначальное обновление превью
-            updatePreview();
-        });
-    </script>
+    <div class="profile-card hidden" id="finalBio">
+        <div class="avatar" id="finalAvatar"></div>
+        <h1 class="username" id="finalName">@username</h1>
+        <p class="bio-text" id="finalBioText">Bio description</p>
+        <div class="social-icons" id="finalIcons"></div>
+        <div class="social-buttons" id="finalButtons"></div>
+    </div>
+
+    <div class="bio-editor hidden" id="htmlCodeSection">
+        <h2>HTML код вашей визитки</h2>
+        <p style="color: rgba(255,255,255,0.6); text-align: center; margin-bottom: 20px; font-size: 13px;">Скопируйте этот код и сохраните как .html файл</p>
+        <div class="form-group">
+            <textarea id="htmlCodeOutput" rows="12" readonly style="font-family: monospace; font-size: 12px; background: rgba(10,10,20,0.9); resize: vertical;"></textarea>
+        </div>
+        <div class="button-group">
+            <button class="btn" id="copyHtmlBtn">Скопировать код</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+// Переменные
+// ──────────────────────────────────────────────
+const videoToggle     = document.getElementById('videoToggle');
+const videoBackground = document.getElementById('videoBackground');
+const videoUrlInput   = document.getElementById('videoUrl');
+
+const backgroundAudio = document.getElementById('backgroundAudio');
+const avatarUrl       = document.getElementById('avatarUrl');
+const avatarPreview   = document.getElementById('avatarPreview');
+
+// ──────────────────────────────────────────────
+// Видео-фон
+// ──────────────────────────────────────────────
+function updateVideoBackground() {
+    if (videoToggle.checked && videoUrlInput.value.trim()) {
+        videoBackground.src = videoUrlInput.value.trim();
+        videoBackground.style.display = 'block';
+        videoBackground.play().catch(()=>{});
+    } else {
+        videoBackground.style.display = 'none';
+        videoBackground.pause();
+    }
+}
+
+videoToggle.addEventListener('change', updateVideoBackground);
+videoUrlInput.addEventListener('input', updateVideoBackground);
+
+// ──────────────────────────────────────────────
+// Аватар превью
+// ──────────────────────────────────────────────
+avatarUrl.addEventListener('input', () => {
+    const val = avatarUrl.value.trim();
+    if (val) {
+        avatarPreview.style.backgroundImage = `url(${val})`;
+        avatarPreview.classList.add('show');
+    } else {
+        avatarPreview.classList.remove('show');
+    }
+});
+
+// ──────────────────────────────────────────────
+// Темы
+// ──────────────────────────────────────────────
+const themeColors = {
+    purple:  { primary:'rgba(139,92,246,0.3)', secondary:'rgba(99,102,241,0.4)', accent:'#a78bfa', orb1:'rgba(99,102,241,0.3)', orb2:'rgba(139,92,246,0.25)', orb3:'rgba(59,130,246,0.2)', orb4:'rgba(168,85,247,0.15)' },
+    cyan:    { primary:'rgba(6,182,212,0.3)',   secondary:'rgba(34,211,238,0.4)', accent:'#22d3ee', orb1:'rgba(6,182,212,0.3)',   orb2:'rgba(34,211,238,0.25)', orb3:'rgba(14,165,233,0.2)', orb4:'rgba(56,189,248,0.15)' },
+    rose:    { primary:'rgba(244,63,94,0.3)',   secondary:'rgba(251,113,133,0.4)',accent:'#fb7185', orb1:'rgba(244,63,94,0.3)',   orb2:'rgba(251,113,133,0.25)',orb3:'rgba(236,72,153,0.2)', orb4:'rgba(249,168,212,0.15)' },
+    emerald: { primary:'rgba(16,185,129,0.3)',  secondary:'rgba(52,211,153,0.4)', accent:'#34d399', orb1:'rgba(16,185,129,0.3)',  orb2:'rgba(52,211,153,0.25)', orb3:'rgba(20,184,166,0.2)', orb4:'rgba(110,231,183,0.15)' },
+    amber:   { primary:'rgba(245,158,11,0.3)',  secondary:'rgba(251,191,36,0.4)', accent:'#fbbf24', orb1:'rgba(245,158,11,0.3)',  orb2:'rgba(251,191,36,0.25)', orb3:'rgba(234,179,8,0.2)',  orb4:'rgba(253,224,71,0.15)' },
+    slate:   { primary:'rgba(100,116,139,0.3)', secondary:'rgba(148,163,184,0.4)',accent:'#94a3b8', orb1:'rgba(100,116,139,0.3)', orb2:'rgba(148,163,184,0.25)',orb3:'rgba(71,85,105,0.2)',  orb4:'rgba(203,213,225,0.15)' }
+};
+
+let currentTheme = 'purple';
+
+function applyTheme(theme) {
+    if (!themeColors[theme]) return;
+    currentTheme = theme;
+    const c = themeColors[theme];
+
+    document.querySelectorAll('.theme-option').forEach(el => el.classList.remove('selected'));
+    document.querySelector(`[data-theme="${theme}"]`).classList.add('selected');
+
+    document.querySelector('.blur-orb-1').style.background = c.orb1;
+    document.querySelector('.blur-orb-2').style.background = c.orb2;
+    document.querySelector('.blur-orb-3').style.background = c.orb3;
+    document.querySelector('.blur-orb-4').style.background = c.orb4;
+
+    const style = document.createElement('style');
+    style.id = 'dyn-theme';
+    if (document.getElementById('dyn-theme')) document.getElementById('dyn-theme').remove();
+    style.textContent = `
+        .btn { background:${c.primary}!important; border-color:${c.secondary}!important; }
+        input:checked + .slider { background:${c.primary}!important; border-color:${c.secondary}!important; }
+        input:checked + .slider:before { background:${c.accent}!important; }
+        .form-group input:focus, .form-group textarea:focus { border-color:${c.secondary}!important; box-shadow:0 0 0 4px ${c.primary}, 0 0 30px ${c.primary}!important; }
+        .form-group label, .media-section h3, .theme-section h3 { color:${c.accent}!important; }
+        .bio-editor h2, .site-header h1 { background:linear-gradient(135deg, ${c.accent} 0%, ${c.secondary} 100%)!important; -webkit-background-clip:text!important; -webkit-text-fill-color:transparent!important; }
+        .social-icon:hover { background:${c.primary}!important; box-shadow:0 8px 25px ${c.primary}!important; border-color:${c.secondary}!important; }
+        .avatar { background:linear-gradient(135deg, ${c.primary} 0%, ${c.secondary} 100%)!important; box-shadow:0 15px 40px rgba(0,0,0,0.4), 0 0 60px ${c.primary}!important; }
+    `;
+    document.head.appendChild(style);
+}
+
+document.querySelectorAll('.theme-option').forEach(el => {
+    el.addEventListener('click', () => applyTheme(el.dataset.theme));
+});
+
+// ──────────────────────────────────────────────
+// Утилиты
+// ──────────────────────────────────────────────
+function updateAvatar(el, url, fallbackText) {
+    if (url && url.trim()) {
+        el.style.backgroundImage = `url(${url.trim()})`;
+        el.classList.add('has-image');
+        el.textContent = '';
+    } else {
+        el.style.backgroundImage = '';
+        el.classList.remove('has-image');
+        el.textContent = fallbackText ? fallbackText.charAt(0).toUpperCase() : '';
+    }
+}
+
+const socialMap = {
+    instagram : { name:'Instagram', color:'rgba(225,48,108,0.2)' },
+    telegram  : { name:'Telegram',  color:'rgba(0,136,204,0.2)'   },
+    youtube   : { name:'YouTube',   color:'rgba(255,0,0,0.2)'     },
+    soundcloud: { name:'SoundCloud',color:'rgba(255,133,0,0.2)'   },
+    github    : { name:'GitHub',    color:'rgba(30,30,50,0.6)'    },
+    twitter   : { name:'Twitter/X', color:'rgba(30,30,50,0.6)'    },
+    whatsapp  : { name:'WhatsApp',  color:'rgba(30,30,50,0.6)'    }
+};
+
+function parseSocialLinks(text, isPreview) {
+    const container = isPreview ? document.getElementById('previewButtons') : document.getElementById('finalButtons');
+    const iconsCont = isPreview ? document.getElementById('previewIcons')  : document.getElementById('finalIcons');
+    container.innerHTML = '';
+    iconsCont.innerHTML = '';
+
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+
+    lines.forEach(line => {
+        const [platformRaw, ...urlParts] = line.split(':');
+        const platform = platformRaw.trim().toLowerCase();
+        const url = urlParts.join(':').trim();
+
+        if (!url || !socialMap[platform]) return;
+
+        const data = socialMap[platform];
+
+        // кнопка
+        const btn = document.createElement('a');
+        btn.href = url;
+        btn.target = '_blank';
+        btn.className = 'social-btn';
+        if (platform === 'soundcloud' || platform === 'telegram' || platform === 'instagram' || platform === 'youtube') {
+            btn.classList.add(platform);
+        }
+        btn.innerHTML = `<span>${data.name}</span>`;
+        container.appendChild(btn);
+
+        // иконка (маленькая круглая)
+        const iconLink = document.createElement('a');
+        iconLink.href = url;
+        iconLink.target = '_blank';
+        iconLink.className = 'social-icon';
+        iconLink.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>'; // заглушка
+        iconsCont.appendChild(iconLink);
+    });
+}
+
+function showNotification() {
+    const n = document.getElementById('notification');
+    n.classList.add('show');
+    setTimeout(() => n.classList.remove('show'), 4500);
+}
+
+function generateStandaloneHTML(name, bio, avatarUrl, linksText, videoUrl, useVideo) {
+    const c = themeColors[currentTheme];
+    
+    // Парсинг социальных ссылок
+    const lines = linksText.split('\n').map(l => l.trim()).filter(Boolean);
+    let socialButtonsHTML = '';
+    let socialIconsHTML = '';
+    
+    lines.forEach(line => {
+        const [platformRaw, ...urlParts] = line.split(':');
+        const platform = platformRaw.trim().toLowerCase();
+        const url = urlParts.join(':').trim();
+        
+        if (!url || !socialMap[platform]) return;
+        
+        const data = socialMap[platform];
+        let btnClass = 'social-btn';
+        if (platform === 'soundcloud' || platform === 'telegram' || platform === 'instagram' || platform === 'youtube') {
+            btnClass += ' ' + platform;
+        }
+        
+        socialButtonsHTML += `<a href="${url}" target="_blank" class="${btnClass}"><span>${data.name}</span></a>`;
+        socialIconsHTML += `<a href="${url}" target="_blank" class="social-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></a>`;
+    });
+    
+    // Аватар
+    let avatarStyle = '';
+    let avatarContent = '';
+    if (avatarUrl) {
+        avatarStyle = `background-image: url(${avatarUrl}); background-size: cover; background-position: center;`;
+    } else {
+        avatarContent = name.charAt(0).toUpperCase();
+    }
+    
+    // Видео фон
+    let videoHTML = '';
+    if (useVideo && videoUrl) {
+        videoHTML = `<video class="video-background" autoplay muted loop><source src="${videoUrl}" type="video/mp4"></video>`;
+    }
+
+    return `<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${name} - Ez-bio.pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Unbounded', sans-serif;
+            background: #0a0a0f;
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .blur-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .blur-orb-1 { width:500px; height:500px; background:${c.orb1}; top:-150px; left:-150px; animation:float1 15s ease-in-out infinite; }
+        .blur-orb-2 { width:400px; height:400px; background:${c.orb2}; top:50%; right:-100px; animation:float2 20s ease-in-out infinite; }
+        .blur-orb-3 { width:350px; height:350px; background:${c.orb3}; bottom:-100px; left:30%; animation:float3 18s ease-in-out infinite; }
+        .blur-orb-4 { width:300px; height:300px; background:${c.orb4}; top:40%; left:10%; animation:float4 22s ease-in-out infinite; }
+        @keyframes float1 { 0%,100% {transform:translate(0,0) scale(1);} 50% {transform:translate(50px,50px) scale(1.1);} }
+        @keyframes float2 { 0%,100% {transform:translate(0,0) scale(1);} 50% {transform:translate(-30px,-40px) scale(0.9);} }
+        @keyframes float3 { 0%,100% {transform:translate(0,0) scale(1);} 50% {transform:translate(40px,-30px) scale(1.05);} }
+        @keyframes float4 { 0%,100% {transform:translate(0,0) scale(1);} 50% {transform:translate(-20px,60px) scale(0.95);} }
+        .video-background {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            object-fit: cover;
+        }
+        .profile-card {
+            background: rgba(15,15,25,0.75);
+            backdrop-filter: blur(50px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 28px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 120px rgba(99,102,241,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            z-index: 1;
+        }
+        .avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 24px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, ${c.primary} 0%, ${c.secondary} 100%);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 52px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4), 0 0 60px ${c.primary};
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .username { color:#ffffff; font-size:26px; font-weight:600; margin-bottom:16px; letter-spacing:-0.5px; }
+        .bio-text { color:rgba(255,255,255,0.6); font-size:14px; line-height:1.7; margin-bottom:28px; }
+        .social-icons { display:flex; justify-content:center; gap:14px; margin-bottom:28px; }
+        .social-icon {
+            width:44px; height:44px;
+            background: rgba(30,30,50,0.6);
+            backdrop-filter: blur(10px);
+            border-radius:12px;
+            display:flex; align-items:center; justify-content:center;
+            color:rgba(255,255,255,0.8);
+            text-decoration:none;
+            transition:all 0.3s ease;
+            border:1px solid rgba(255,255,255,0.08);
+        }
+        .social-icon:hover {
+            background: ${c.primary};
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px ${c.primary};
+            border-color: ${c.secondary};
+        }
+        .social-buttons { display:flex; flex-direction:column; gap:14px; }
+        .social-btn {
+            background: rgba(30,30,50,0.6);
+            backdrop-filter: blur(10px);
+            color:white;
+            border:1px solid rgba(255,255,255,0.1);
+            padding:14px 22px;
+            border-radius:14px;
+            font-family:'Unbounded',sans-serif;
+            font-weight:500;
+            font-size:14px;
+            cursor:pointer;
+            transition:all 0.3s ease;
+            text-decoration:none;
+            display:flex; align-items:center; justify-content:center;
+            gap:10px;
+            box-shadow:0 4px 20px rgba(0,0,0,0.3);
+        }
+        .social-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(0,0,0,0.4); }
+        .social-btn.soundcloud { background:rgba(255,133,0,0.2); border-color:rgba(255,133,0,0.3); }
+        .social-btn.soundcloud:hover { background:rgba(255,133,0,0.35); }
+        .social-btn.telegram { background:rgba(0,136,204,0.2); border-color:rgba(0,136,204,0.3); }
+        .social-btn.telegram:hover { background:rgba(0,136,204,0.35); }
+        .social-btn.instagram { background:rgba(225,48,108,0.2); border-color:rgba(225,48,108,0.3); }
+        .social-btn.instagram:hover { background:rgba(225,48,108,0.35); }
+        .social-btn.youtube { background:rgba(255,0,0,0.2); border-color:rgba(255,0,0,0.3); }
+        .social-btn.youtube:hover { background:rgba(255,0,0,0.35); }
+        .icon { width:18px; height:18px; fill:currentColor; }
+        @media (max-width:768px) {
+            .profile-card { padding:28px; border-radius:20px; }
+            .username { font-size:22px; }
+            .blur-orb { opacity:0.25; }
+        }
+    </style>
+</head>
+<body>
+    <div class="blur-orb blur-orb-1"></div>
+    <div class="blur-orb blur-orb-2"></div>
+    <div class="blur-orb blur-orb-3"></div>
+    <div class="blur-orb blur-orb-4"></div>
+    ${videoHTML}
+    <div class="profile-card">
+        <div class="avatar" style="${avatarStyle}">${avatarContent}</div>
+        <h1 class="username">${name}</h1>
+        <p class="bio-text">${bio}</p>
+        <div class="social-icons">${socialIconsHTML}</div>
+        <div class="social-buttons">${socialButtonsHTML}</div>
+    </div>
+</body>
+</html>`;
+}
+
+// ──────────────────────────────────────────────
+// Основные действия
+// ──────────────────────────────────────────────
+function previewBio() {
+    const username   = document.getElementById('profileName').value.trim()   || '@username';
+    const display    = document.getElementById('displayName').value.trim();
+    const bio        = document.getElementById('profileBio').value.trim()    || 'Описание отсутствует';
+    const links      = document.getElementById('socialLinks').value;
+    const avatarUrl  = document.getElementById('avatarUrl').value.trim();
+
+    document.getElementById('previewName').textContent = display || username;
+    document.getElementById('previewBio').textContent  = bio;
+
+    updateAvatar(document.getElementById('previewAvatar'), avatarUrl, display || username);
+
+    parseSocialLinks(links, true);
+
+    document.getElementById('bioPreview').classList.remove('hidden');
+    document.getElementById('bioPreview').scrollIntoView({behavior:'smooth'});
+}
+
+function saveBio() {
+    const username   = document.getElementById('profileName').value.trim()   || '@username';
+    const display    = document.getElementById('displayName').value.trim();
+    const bio        = document.getElementById('profileBio').value.trim()    || 'Описание отсутствует';
+    const links      = document.getElementById('socialLinks').value;
+    const avatarUrlVal  = document.getElementById('avatarUrl').value.trim();
+    const videoUrl   = document.getElementById('videoUrl').value.trim();
+    const useVideo   = document.getElementById('videoToggle').checked;
+
+    document.getElementById('finalName').textContent     = display || username;
+    document.getElementById('finalBioText').textContent  = bio;
+
+    updateAvatar(document.getElementById('finalAvatar'), avatarUrlVal, display || username);
+
+    parseSocialLinks(links, false);
+
+    document.getElementById('bioEditor').classList.add('hidden');
+    document.getElementById('bioPreview').classList.add('hidden');
+    document.getElementById('finalBio').classList.remove('hidden');
+    document.getElementById('htmlCodeSection').classList.remove('hidden');
+    document.getElementById('finalBio').scrollIntoView({behavior:'smooth'});
+
+    // Генерация HTML кода визитки
+    const htmlCode = generateStandaloneHTML(display || username, bio, avatarUrlVal, links, videoUrl, useVideo);
+    document.getElementById('htmlCodeOutput').value = htmlCode;
+
+    showNotification();
+}
+
+function editBio() {
+    document.getElementById('finalBio').classList.add('hidden');
+    document.getElementById('bioPreview').classList.add('hidden');
+    document.getElementById('bioEditor').classList.remove('hidden');
+    document.getElementById('bioEditor').scrollIntoView({behavior:'smooth'});
+}
+
+// Привязка событий
+document.getElementById('previewBtn').addEventListener('click', previewBio);
+document.getElementById('saveBtn').addEventListener('click', saveBio);
+document.getElementById('editFromPreview').addEventListener('click', editBio);
+document.getElementById('copyHtmlBtn').addEventListener('click', function() {
+    const textarea = document.getElementById('htmlCodeOutput');
+    textarea.select();
+    document.execCommand('copy');
+    
+    const btn = document.getElementById('copyHtmlBtn');
+    const originalText = btn.textContent;
+    btn.textContent = 'Скопировано!';
+    setTimeout(() => { btn.textContent = originalText; }, 2000);
+});
+
+// Инициализация темы
+applyTheme('purple');
+</script>
 </body>
 </html>
