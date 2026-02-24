@@ -198,8 +198,26 @@
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.1);
+            background-size: cover;
+            background-position: center;
         }
         .avatar.has-image { background-color: transparent; }
+        
+        /* Исправленный стиль для превью в редакторе */
+        .avatar-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background-size: cover;
+            background-position: center;
+            margin-left: 15px;
+            display: none;
+        }
+        .avatar-preview.show {
+            display: block;
+        }
+
         .username { color:#ffffff; font-size:26px; font-weight:600; margin-bottom:16px; letter-spacing:-0.5px; }
         .bio-text { color:rgba(255,255,255,0.6); font-size:14px; line-height:1.7; margin-bottom:28px; }
         .social-icons { display:flex; justify-content:center; gap:14px; margin-bottom:28px; }
@@ -363,7 +381,6 @@
 </div>
 
 <video class="video-background" id="videoBackground" autoplay muted loop></video>
-<audio id="backgroundAudio" loop></audio>
 
 <div class="container">
 
@@ -507,7 +524,6 @@ const videoToggle     = document.getElementById('videoToggle');
 const videoBackground = document.getElementById('videoBackground');
 const videoUrlInput   = document.getElementById('videoUrl');
 
-const backgroundAudio = document.getElementById('backgroundAudio');
 const avatarUrl       = document.getElementById('avatarUrl');
 const avatarPreview   = document.getElementById('avatarPreview');
 
@@ -529,7 +545,7 @@ videoToggle.addEventListener('change', updateVideoBackground);
 videoUrlInput.addEventListener('input', updateVideoBackground);
 
 // ──────────────────────────────────────────────
-// Аватар превью
+// Аватар превью (в редакторе)
 // ──────────────────────────────────────────────
 avatarUrl.addEventListener('input', () => {
     const val = avatarUrl.value.trim();
@@ -579,7 +595,7 @@ function applyTheme(theme) {
         .form-group label, .media-section h3, .theme-section h3 { color:${c.accent}!important; }
         .bio-editor h2, .site-header h1 { background:linear-gradient(135deg, ${c.accent} 0%, ${c.secondary} 100%)!important; -webkit-background-clip:text!important; -webkit-text-fill-color:transparent!important; }
         .social-icon:hover { background:${c.primary}!important; box-shadow:0 8px 25px ${c.primary}!important; border-color:${c.secondary}!important; }
-        .avatar { background:linear-gradient(135deg, ${c.primary} 0%, ${c.secondary} 100%)!important; box-shadow:0 15px 40px rgba(0,0,0,0.4), 0 0 60px ${c.primary}!important; }
+        .avatar { background-color:${c.primary}!important; box-shadow:0 15px 40px rgba(0,0,0,0.4), 0 0 60px ${c.primary}!important; }
     `;
     document.head.appendChild(style);
 }
@@ -641,12 +657,12 @@ function parseSocialLinks(text, isPreview) {
         btn.innerHTML = `<span>${data.name}</span>`;
         container.appendChild(btn);
 
-        // иконка (маленькая круглая)
+        // иконка
         const iconLink = document.createElement('a');
         iconLink.href = url;
         iconLink.target = '_blank';
         iconLink.className = 'social-icon';
-        iconLink.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>'; // заглушка
+        iconLink.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>'; 
         iconsCont.appendChild(iconLink);
     });
 }
@@ -694,7 +710,7 @@ function generateStandaloneHTML(name, bio, avatarUrl, linksText, videoUrl, useVi
     // Видео фон
     let videoHTML = '';
     if (useVideo && videoUrl) {
-        videoHTML = `<video class="video-background" autoplay muted loop><source src="${videoUrl}" type="video/mp4"></video>`;
+        videoHTML = `<video class="video-background" autoplay muted loop style="display:block;"><source src="${videoUrl}" type="video/mp4"></video>`;
     }
 
     return `<!DOCTYPE html>
@@ -760,7 +776,7 @@ function generateStandaloneHTML(name, bio, avatarUrl, linksText, videoUrl, useVi
             height: 130px;
             border-radius: 24px;
             margin: 0 auto 24px;
-            background: linear-gradient(135deg, ${c.primary} 0%, ${c.secondary} 100%);
+            background-color: ${c.primary};
             backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
@@ -772,6 +788,8 @@ function generateStandaloneHTML(name, bio, avatarUrl, linksText, videoUrl, useVi
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.1);
+            background-size: cover;
+            background-position: center;
         }
         .username { color:#ffffff; font-size:26px; font-weight:600; margin-bottom:16px; letter-spacing:-0.5px; }
         .bio-text { color:rgba(255,255,255,0.6); font-size:14px; line-height:1.7; margin-bottom:28px; }
@@ -853,12 +871,12 @@ function previewBio() {
     const display    = document.getElementById('displayName').value.trim();
     const bio        = document.getElementById('profileBio').value.trim()    || 'Описание отсутствует';
     const links      = document.getElementById('socialLinks').value;
-    const avatarUrl  = document.getElementById('avatarUrl').value.trim();
+    const avatarUrlVal  = document.getElementById('avatarUrl').value.trim();
 
     document.getElementById('previewName').textContent = display || username;
     document.getElementById('previewBio').textContent  = bio;
 
-    updateAvatar(document.getElementById('previewAvatar'), avatarUrl, display || username);
+    updateAvatar(document.getElementById('previewAvatar'), avatarUrlVal, display || username);
 
     parseSocialLinks(links, true);
 
